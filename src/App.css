@@ -1,6 +1,6 @@
 /* bg-green-600 text-white px-4 py-2 w-[100px] text-center rounded-lg cursor-pointer */
 .save-btn{
-    background-color: green;
+    background-color: var(--color-accent);
     color: white;
     padding: 0.5rem 1rem;
     width: 100px;
