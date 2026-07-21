@@ -35,7 +35,7 @@ for (const item of commands) {
 
   child.on('exit', (code) => {
     if (code && code !== 0) {
-      console.error(${item.label} exited with code );
+      console.error(`${item.label} exited with code ${code}`);
       stopChildren();
       process.exitCode = code;
     }
