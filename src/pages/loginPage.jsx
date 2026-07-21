@@ -59,13 +59,9 @@ export default function LoginPage(){
 
             if(res.data.isAdmin){
 
-                //window.location.href = "/admin"
-
                 navigate("/admin")
 
             }else{
-
-                //window.location.href = "/"
 
                 navigate("/")
 
@@ -80,49 +76,64 @@ export default function LoginPage(){
     }
 
     return (
-        <div className="w-full h-full bg-[url('/login-bg.jpg')] bg-cover bg-no-repeat flex justify-center items-center">
+        <div className="w-full min-h-screen bg-gradient-to-br from-bg via-surface to-bg flex justify-center items-center p-4">
 
-            <div className="w-[400px] h-[500px] backdrop-blur-md shadow-2xl shadow-white rounded-xl flex flex-col p-4">
+            <div className="w-full max-w-md bg-surface shadow-2xl rounded-2xl flex flex-col p-8 border border-border">
 
-                <h1 className="w-full h-[80px] text-center text-3xl font-bold text-white">Login</h1>
+                <h1 className="w-full text-center text-3xl font-bold text-primary mb-2">Welcome Back</h1>
+                <p className="text-center text-muted text-sm mb-8">Sign in to your account</p>
 
-                <div className="w-full  ">
-                    <label className="text-white text-lg flex items-center  gap-2"><MdEmail/> Email</label>
-                    <input className="w-full h-[40px] rounded-md px-2 border border-white" type="email" placeholder="kasun@gmail.com" 
-                        onChange={
-                            (e)=>{
-                                setEmail(e.target.value) 
-                            }
-                        }
+                <div className="w-full mb-5">
+                    <label className="text-primary text-sm font-semibold flex items-center gap-2 mb-2"><MdEmail size={18}/> Email</label>
+                    <input 
+                        className="w-full h-[45px] rounded-lg px-4 border border-border bg-bg text-primary focus:ring-2 focus:ring-accent focus:border-transparent transition" 
+                        type="email" 
+                        placeholder="you@example.com" 
+                        onChange={(e)=>{setEmail(e.target.value)}} 
                         value={email}
-                        />
+                    />
                 </div>
 
-                <div className="w-full  mt-5">
-                    <label className="text-white text-lg flex items-center  gap-2"><BiKey/> Password</label>
+                <div className="w-full mb-2">
+                    <label className="text-primary text-sm font-semibold flex items-center gap-2 mb-2"><BiKey size={18}/> Password</label>
                     <input
-                        onChange={
-                            (e)=>{
-                                setPassword(e.target.value)
-                            }
-                        }                       
-                            type="password"
-                            value={password}
-                    className="w-full h-[40px] rounded-md px-2 border border-white" placeholder="•••••••••••"/>
+                        onChange={(e)=>{setPassword(e.target.value)}}                       
+                        type="password"
+                        value={password}
+                        className="w-full h-[45px] rounded-lg px-4 border border-border bg-bg text-primary focus:ring-2 focus:ring-accent focus:border-transparent transition" 
+                        placeholder="••••••••••"
+                    />
                 </div>
-                <p className="w-full h-2 text-white text-right italic">Forget your password? click <Link to="/forget-password" className="font-bold text-accent">Here</Link> </p>
-                <button disabled={loading} className="w-full h-[50px] bg-accent mt-10 text-white rounded-lg" onClick={handleLogin}>
-                    {
-                        loading ? "Loading..." : "Login"
-                    }
+
+                <div className="text-right mb-6">
+                    <Link to="/forget-password" className="text-accent hover:text-accent-dark text-sm font-medium transition">Forgot password?</Link>
+                </div>
+
+                <button 
+                    disabled={loading} 
+                    className="w-full h-[48px] bg-gradient-to-r from-accent to-accent-dark text-white rounded-lg font-semibold hover:shadow-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                    onClick={handleLogin}
+                >
+                    {loading ? "Signing in..." : "Sign In"}
                 </button>
-                <p className="w-full h-2 text-white text-right italic ">Don't have an account? click <Link to="/signup" className="font-bold text-accent">Here</Link> </p>
-                <button onClick={googleLogin} className="w-full h-[50px] bg-secondary mt-5 text-white rounded-lg flex justify-center items-center gap-2"><BsGoogle/> Sign In with Google</button>
+
+                <div className="my-6 flex items-center gap-4">
+                    <div className="flex-1 h-px bg-border"></div>
+                    <span className="text-muted text-sm">or</span>
+                    <div className="flex-1 h-px bg-border"></div>
+                </div>
+
+                <button 
+                    onClick={googleLogin} 
+                    className="w-full h-[48px] bg-secondary hover:bg-primary text-white rounded-lg font-semibold flex justify-center items-center gap-2 transition-all"
+                >
+                    <BsGoogle size={18}/> Continue with Google
+                </button>
+
+                <p className="w-full text-center text-muted text-sm mt-6">
+                    Don't have an account? <Link to="/signup" className="font-semibold text-accent hover:text-accent-dark transition">Sign up</Link>
+                </p>
             </div>
         </div>
     )
 }
-
-//181800 secondary
-//f4f4f4 primary
-//001a84 accent
