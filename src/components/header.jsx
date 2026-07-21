@@ -7,7 +7,7 @@ import { CiPhone } from "react-icons/ci";
 export default function Header(){
     return(
         <>
-        <header className="w-full h-[100px] bg-gradient-to-r from-accent to-accent-dark shadow-lg flex justify-center lg:justify-between p-6">
+        <header className="w-full h-[100px] bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg flex justify-center lg:justify-between p-6">
             <Link to="/" className="flex items-center">
                 <img src="/logo-white.png" className="h-full " alt="iComputers Logo"/>
             </Link>
@@ -24,16 +24,16 @@ export default function Header(){
             </div>
         </header>
 
-        <div className="fixed bottom-0 left-0 w-full h-[80px] bg-surface shadow-2xl flex lg:hidden justify-evenly items-center z-50 border-t border-border">
-            <Link to="/" className="h-full flex flex-col justify-center items-center text-accent hover:text-accent-dark text-3xl transition-colors">
+        <div className="fixed bottom-0 left-0 w-full h-[80px] bg-white shadow-2xl flex lg:hidden justify-evenly items-center z-50 border-t border-slate-200">
+            <Link to="/" className="h-full flex flex-col justify-center items-center text-blue-600 hover:text-blue-700 text-3xl transition-colors">
                 <IoHomeOutline />
                 <span className="text-xs mt-1">Home</span>
             </Link>
-            <Link to="/products" className="h-full flex flex-col justify-center items-center text-accent hover:text-accent-dark text-3xl transition-colors">
+            <Link to="/products" className="h-full flex flex-col justify-center items-center text-blue-600 hover:text-blue-700 text-3xl transition-colors">
                 <IoCubeOutline />
                 <span className="text-xs mt-1">Products</span>
             </Link>
-            <Link to="/contact-us" className="h-full flex flex-col justify-center items-center text-accent hover:text-accent-dark text-3xl transition-colors">
+            <Link to="/contact-us" className="h-full flex flex-col justify-center items-center text-blue-600 hover:text-blue-700 text-3xl transition-colors">
                 <CiPhone />
                 <span className="text-xs mt-1">Contact</span>
             </Link>
