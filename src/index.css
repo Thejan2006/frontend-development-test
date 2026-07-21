@@ -1,29 +1,17 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss";
 
-:root {
-  /* Professional Color Palette */
-  --color-bg: #f8fafc;          /* Light background */
-  --color-surface: #ffffff;      /* White surfaces */
-  --color-primary: #0f172a;      /* Deep blue-gray */
-  --color-secondary: #1e293b;    /* Slate */
-  --color-accent: #2563eb;       /* Professional blue */
-  --color-accent-dark: #1d4ed8;  /* Darker blue */
-  --color-muted: #6b7280;        /* Medium gray */
-  --color-border: #e2e8f0;       /* Light border */
-}
-
 @layer base {
   body {
     @apply bg-slate-50 text-slate-900 font-sans antialiased;
   }
 
   a {
-    @apply text-blue-600 hover:text-blue-700 transition-colors;
+    @apply transition-colors duration-200;
   }
 
   button:not(:disabled) {
-    @apply transition-all active:scale-95;
+    @apply transition-all duration-200 active:scale-[0.98];
   }
 
   button:disabled {
@@ -31,28 +19,20 @@
   }
 
   input, textarea, select {
-    @apply border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+    @apply border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow duration-200;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors;
+    @apply bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 hover:shadow-md transition-all font-medium;
   }
 
   .btn-secondary {
-    @apply bg-slate-700 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors;
+    @apply bg-slate-800 text-white px-5 py-2.5 rounded-lg hover:bg-slate-900 hover:shadow-md transition-all font-medium;
   }
 
   .card {
-    @apply bg-white rounded-lg shadow-md border border-slate-200;
-  }
-
-  .nav-item {
-    @apply text-white hover:text-gray-200 transition-colors;
-  }
-
-  .text-subtle {
-    @apply text-slate-500;
+    @apply bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow duration-300;
   }
 }
