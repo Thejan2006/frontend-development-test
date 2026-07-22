@@ -7,23 +7,32 @@ import CheckoutPage from "./checkout";
 import MyOrders from "./myOrders";
 import Settings from "./settings";
 import LandingPage from "./landingComponent";
+import ContactUsPage from "./contactUsPage";
+import ReviewsPage from "./reviewsPage";
 
 export default function HomePage() {
 	return (
-		<div className="w-full min-h-screen bg-slate-50 text-slate-900">
+		<div className="w-full min-h-screen bg-slate-50 text-slate-900 font-sans antialiased justify-center items-center flex flex-col">
 			<Header />
-			<div className="min-h-[calc(100vh-80px)] w-full pb-20 lg:pb-0">
+			<div className="min-h-[calc(100vh-72px)] w-full pb-20 lg:pb-0">
                 <Routes>
-                    <Route path="/" element={<LandingPage/>} />
-                    <Route path="/products" element={<ProductsPage />} />
-                    <Route path="/contact-us" element={<div className="w-full h-[calc(100vh-80px)] flex items-center justify-center"><h1 className="text-3xl font-bold text-slate-400">Contact Us Coming Soon</h1></div>} />
-                    <Route path="/about-us" element={<div className="w-full h-[calc(100vh-80px)] flex items-center justify-center"><h1 className="text-3xl font-bold text-slate-400">About Us Coming Soon</h1></div>} />
+                    <Route path="/"                  element={<LandingPage/>} />
+                    <Route path="/products"           element={<ProductsPage />} />
+                    <Route path="/contact-us"         element={<ContactUsPage />} />
+                    <Route path="/reviews"            element={<ReviewsPage />} />
+                    <Route path="/about-us"           element={<ContactUsPage />} />
                     <Route path="/overview/:productId" element={<ProductOverview />} />
-                    <Route path="/cart" element={<CartPage />} />
-                    <Route path="/checkout" element={<CheckoutPage />} />
-                    <Route path="/my-orders" element={<MyOrders/>} />
-                    <Route path="/settings" element={<Settings/>} />
-                    <Route path="/*" element={<div className="w-full h-[calc(100vh-80px)] flex flex-col items-center justify-center"><h1 className="text-5xl font-bold text-slate-900 mb-4">404</h1><p className="text-slate-500">Page Not Found</p></div>} />
+                    <Route path="/cart"               element={<CartPage />} />
+                    <Route path="/checkout"           element={<CheckoutPage />} />
+                    <Route path="/my-orders"          element={<MyOrders/>} />
+                    <Route path="/settings"           element={<Settings/>} />
+                    <Route path="/*" element={
+                        <div className="w-full h-[calc(100vh-72px)] flex flex-col items-center justify-center">
+                            <h1 className="text-7xl font-black text-slate-900 mb-3">404</h1>
+                            <p className="text-slate-500 font-semibold tracking-widest uppercase mb-6">Page Not Found</p>
+                            <a href="/" className="btn-primary px-6 py-3 text-sm">Back to Home</a>
+                        </div>
+                    }/>
                 </Routes>
 			</div>
 		</div>
