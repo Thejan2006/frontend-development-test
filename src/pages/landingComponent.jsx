@@ -40,7 +40,7 @@ export default function LandingPage(){
             {/* ======= HERO BANNER ======= */}
             <section className="w-full bg-gray-50 border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col md:flex-row items-center min-h-[340px] gap-6 py-8 md:py-0">
+                    <div className="flex flex-col md:flex-row items-center min-h-85 gap-6 py-8 md:py-0">
 
                         {/* Left Text */}
                         <div className="w-full md:w-5/12 flex flex-col justify-center">
@@ -69,7 +69,7 @@ export default function LandingPage(){
                             <img
                                 src="/clean-hero.png"
                                 alt="ISURI COMPUTERS Tech Products"
-                                className="w-full max-h-[340px] object-contain rounded-2xl"
+                                className="w-full max-h-85 object-contain rounded-2xl"
                                 onError={(e) => { e.target.src = "/hero-banner.png"; e.target.onerror = null; }}
                             />
                         </div>
