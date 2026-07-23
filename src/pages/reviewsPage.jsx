@@ -103,7 +103,6 @@ export default function ReviewsPage() {
       verified: true,
       likes: 0
     };
-
     const updated = [newReview, ...reviews];
     setReviews(updated);
     localStorage.setItem("isuri_reviews", JSON.stringify(updated));
