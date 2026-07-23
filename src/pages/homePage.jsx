@@ -10,6 +10,7 @@ import LandingPage from "./landingComponent";
 import ContactUsPage from "./contactUsPage";
 import ReviewsPage from "./reviewsPage";
 
+
 export default function HomePage() {
 	return (
 		<div className="w-full min-h-screen bg-slate-50 text-slate-900 font-sans antialiased justify-center items-center flex flex-col">
