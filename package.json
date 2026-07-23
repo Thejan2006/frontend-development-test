@@ -5,13 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:frontend": "npm run dev --prefix frontend",
-    "dev:backend": "npm run dev --prefix backend",
-    "build": "npm run build --prefix frontend",
-    "preview": "npm run preview --prefix frontend",
-    "seed:admin": "npm run seed:admin --prefix backend",
-    "install:frontend": "npm install --prefix frontend",
-    "install:backend": "npm install --prefix backend"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@react-oauth/google": "^0.13.5",
