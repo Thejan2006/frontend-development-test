@@ -324,7 +324,6 @@ export default function LandingPage() {
                         <p className="text-sm font-medium">Loading products or no products found...</p>
                     </div>
                 )}
-
                 <div className="text-center mt-12">
                     <Link to="/products" className="bg-neon-green text-black font-semibold px-10 py-3.5 rounded-xl inline-flex items-center gap-2 shadow-xl shadow-neon-green/30 hover:shadow-neon-green/50 hover:-translate-y-0.5 transition-all duration-300"
                         style={{ backgroundColor: '#39ff14' }}
