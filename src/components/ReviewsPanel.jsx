@@ -76,7 +76,7 @@ export default function ReviewsPanel({ productId }) {
         }
     };
 
-    // Review එකක් මකා දැමීම (Delete)
+    
     const handleDelete = async (reviewId) => {
         if (!window.confirm("Are you sure you want to delete this review?")) return;
 
@@ -92,14 +92,14 @@ export default function ReviewsPanel({ productId }) {
         }
     };
 
-    // Edit Mode එකට හැරවීම
+
     const startEditing = (rev) => {
         setEditingReviewId(rev.id || rev._id);
         setEditRating(rev.rating);
         setEditComment(rev.comment);
     };
 
-    // Review එක Update කිරීම (Save Edit)
+
     const handleUpdate = async (reviewId) => {
         if (!editComment.trim()) return;
 
@@ -124,7 +124,7 @@ export default function ReviewsPanel({ productId }) {
         <div className="w-full mt-10 p-6 bg-white/5 border border-slate-200 rounded-xl shadow-lg">
             <h2 className="text-2xl font-bold mb-4 text-text-main">Product Reviews</h2>
             
-            {/* අලුත් Review එකක් දැමීමේ Form එක (User දැනට Review එකක් දාලා නැත්නම් පමණක් පෙන්වන්න පුළුවන්, හෝ backend එකෙන් 409 දෙයි) */}
+            
             {isLoggedIn ? (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3 mb-8">
                     <select 
@@ -160,7 +160,7 @@ export default function ReviewsPanel({ productId }) {
                 </div>
             )}
 
-            {/* Reviews ලැයිස්තුව */}
+            
             <div className="flex flex-col gap-4">
                 {reviews.length === 0 ? (
                     <p className="text-slate-500 text-center py-4 bg-slate-50 rounded-lg">No reviews yet. Be the first to review!</p>
@@ -196,7 +196,7 @@ export default function ReviewsPanel({ productId }) {
                                     </div>
                                 </div>
 
-                                {/* Review Comment හෝ Edit Form එක */}
+                               
                                 {isEditing ? (
                                     <div className="flex flex-col gap-2 mt-2">
                                         <select 
