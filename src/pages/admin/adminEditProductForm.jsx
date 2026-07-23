@@ -31,72 +31,56 @@ export default function AdminEditProductForm(){
         const token = localStorage.getItem("token");
 
         if(token == null){
-            toast.error("You must be logged in to add a product");
+            toast.error("You must be logged in to update a product");
             navigate("/signin");
+            setIsLoading(false);
             return;
         }
 
-        
-    try{
-        const imageUploadPromises = []
+        try{
+            const imageUploadPromises = []
 
-        for(let i=0; i<images.length; i++){
+            for(let i=0; i<images.length; i++){
+                imageUploadPromises.push(uploadMedia(images[i]))
+            }
 
-            imageUploadPromises.push(uploadMedia(images[i]))
+            let imageUrls = await Promise.all(imageUploadPromises);
 
-        }
-        //imageUploadPromises -> [Promise1, Promise2, Promise3]
+            if(imageUrls.length == 0){
+                imageUrls = location.state.images;
+            }
 
-        let imageUrls = await Promise.all(imageUploadPromises);
+            const altNamesArray = altNames.split(",").map(item => item.trim());
 
-        if(imageUrls.length == 0){
-            imageUrls = location.state.images;
-        }
+            const requestBody = {
+                name : name,
+                altNames : altNamesArray,
+                description : description,
+                price : Number(price),                // Numbers walata parse kala
+                labelledPrice : Number(labelledPrice), // Numbers walata parse kala
+                images : imageUrls,
+                isAvailable : isAvailable === "true" || isAvailable === true, // Boolean karagaththa
+                category : category,
+                stock : Number(stock),                // Numbers walata parse kala
+                brand : brand,
+                model : model
+            }
 
-        const altNamesArray = altNames.split(",")
-
-        console.log(altNamesArray)
-
-
-        const requestBody = {
-            name : name,
-            altNames : altNamesArray,
-            description : description,
-            price : price,
-            labelledPrice : labelledPrice,
-            images : imageUrls,
-            isAvailable : isAvailable,
-            category : category,
-            stock : stock,
-            brand : brand,
-            model : model
-        }
-
-        //backend
-        await api.put("/products/"+productId, requestBody , 
-            {
+            //backend
+            await api.put("/products/"+productId, requestBody, {
                 headers : {
                     Authorization : "Bearer " + token
                 }
-            } 
-        )
+            })
 
-        toast.success("Product updated successfully");
-        navigate("/admin/products");
+            toast.success("Product updated successfully");
+            navigate("/admin/products");
 
-        setIsLoading(false);
-    }catch(error){
-        toast.error(error?.response?.data?.message || "Failed to update product");
-        setIsLoading(false);
-    }
-
-
-        //images upload ["url1", "url2", "url3"]
-        //"headphone,headset,audio device"
-        //altNames -> ["headphone", "headset", "audio device"]
-
-        //json of a product send backend
-
+        }catch(error){
+            toast.error(error?.response?.data?.message || "Failed to update product");
+        } finally {
+            setIsLoading(false); // Success wunath error wunath loading false karai
+        }
     }
 
 

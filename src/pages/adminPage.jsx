@@ -16,37 +16,35 @@ export default function AdminPage(){
 
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-    useEffect(
-        ()=>{
-            const token = localStorage.getItem("token");
+    useEffect(() => {
+        const token = localStorage.getItem("token");
 
-            if(token != null){
-
-                api.get("/users/me" , {
-                    headers : {
-                        "Authorization" : `Bearer ${token}`
-                    }
-                }).then((res)=>{
-                    
-                    if(res.data.isAdmin){
-                        setUser(res.data);
-                    }else{
-                        toast.error("You are not authorized to access this page");
-                        navigate("/");
-                    }
-
-                }).catch((err)=>{
-                    console.log(err);
-                    setUser(null);
-                });
-
-            }else{
-                toast.error("You are not authorized to access this page");
+        if (token != null) {
+            api.get("/auth/me", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }).then((res) => {
+                // Backend response structure එක අනුව user ගේ admin status එක ගන්න
+                const userData = res.data.user || res.data.data || res.data;
+                
+                if (userData.isAdmin || userData.role === "admin") {
+                    setUser(userData);
+                } else {
+                    toast.error("You are not authorized to access this page");
+                    navigate("/");
+                }
+            }).catch((err) => {
+                console.log(err);
+                setUser(null);
                 navigate("/login");
-            }
+            });
+        } else {
+            toast.error("You are not authorized to access this page");
+            navigate("/login");
         }
-        ,[navigate]
-    )
+    }, [navigate]);
+    
 
     return(
         <div className="w-full h-full flex bg-primary">

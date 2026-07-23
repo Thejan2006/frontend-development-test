@@ -10,23 +10,24 @@ export default function AdminOrderDataModal(props) {
 	const refresh = props.refresh;
 
     function updateOrderStatus(newStatus){
-        const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-        api.put("/orders/"+order.orderId , {
-            status : newStatus
-        } , {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        }).then((res)=>{
-            toast.success("Order status updated successfully")
-            console.log(res.data)
-            refresh()
-        }).catch((err)=>{
-            console.log(err)
-            toast.error("Failed to update order status")
-        })
-    }
+    
+    api.put("/orders/" + order.orderId, {
+        status: newStatus
+    }, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }).then((res)=>{
+        toast.success("Order status updated successfully")
+        console.log(res.data)
+        refresh()
+    }).catch((err)=>{
+        console.log(err)
+        toast.error(err?.response?.data?.message || "Failed to update order status")
+    })
+}
 
 	return (
 		<>

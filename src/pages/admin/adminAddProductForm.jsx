@@ -50,18 +50,18 @@ export default function AdminAddProductForm(){
 
 
         const requestBody = {
-            productId : productId,
-            name : name,
-            altNames : altNamesArray,
-            description : description,
-            price : price,
-            labelledPrice : labelledPrice,
-            images : imageUrls,
-            isAvailable : isAvailable,
-            category : category,
-            stock : stock,
-            brand : brand,
-            model : model
+            productId: productId,
+            name: name,
+            altNames: altNamesArray,
+            description: description,
+            price: Number(price),                  
+            labelledPrice: Number(labelledPrice),  
+            images: imageUrls,
+            isAvailable: isAvailable === "true" || isAvailable === true,
+            category: category,
+            stock: Number(stock),             
+            brand: brand,
+            model: model
         }
 
         //backend

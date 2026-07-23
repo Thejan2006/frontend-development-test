@@ -7,151 +7,153 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { useGoogleLogin } from "@react-oauth/google";
 
-export default function RegisterPage(){
-    const [email, setEmail] = useState("")
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
+export default function RegisterPage() {
+    const [email, setEmail] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const googleLogin = useGoogleLogin({
         onSuccess: (response) => {
-            api.post("/users/google-login", { accessToken: response.access_token })
-                .then((res) => {
-                    localStorage.setItem("token", res.data.token)
-                    navigate(res.data.isAdmin ? "/admin" : "/")
-                })
-                .catch((err) => console.log(err))
+            console.log(response);
+            api.post("/users/google-login", {
+                accessToken: response.access_token,
+            }).then((res) => {
+                console.log(res);
+                localStorage.setItem("token", res.data.token);
+                if (res.data.isAdmin) {
+                    navigate("/admin");
+                } else {
+                    navigate("/");
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
         },
-        onError: (err) => console.log(err)
-    })
+        onError: (err) => {
+            console.log(err);
+        },
+    });
 
-    async function handleRegister(){
-        if(password !== confirmPassword){
-            toast.error("Passwords do not match")
-            return
+    async function handleRegister() {
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
         }
-        setLoading(true)
+        setLoading(true);
         try {
-            await api.post("/users/", { email, password, firstName, lastName })
-            navigate("/signin")
-        } catch(err) {
-            toast.error(err?.response?.data?.message || "Registration failed")
+            await api.post("/auth/register", {
+                email: email,
+                password: password,
+                name: `${firstName} ${lastName}`
+                
+            });
+            navigate("/signin");
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Registration failed");
         }
-        setLoading(false)
+        setLoading(false);
     }
 
     return (
-        <div className="w-full min-h-screen flex items-center justify-center p-6 py-12 relative overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)' }}>
+        <div className="w-full h-full min-h-screen relative flex justify-center items-center overflow-hidden py-10 backdrop-blur-2xl bg-[url(https://images.unsplash.com/photo-1584949091598-c31daaaa4aa9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)]">
+            <img src="/auth-bg.jpg" className="absolute inset-0 w-full h-full object-cover" alt="" />
+            <div className="absolute inset-0 bg-slate-950/50" />
 
-            {/* Ambient Glows */}
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="relative w-[400px] max-w-[90vw] backdrop-blur-xl bg-white/15 border border-white/25 rounded-2xl shadow-2xl flex flex-col p-8">
+                <img src="/logo-white.png" alt="Isuri Computers" className="h-10 w-auto mx-auto mb-6" />
+                <h1 className="w-full text-center text-2xl font-bold text-white mb-6">Create your account</h1>
 
-            <div className="relative z-10 w-full max-w-md animate-fade-in-up">
-                <div className="text-center mb-8">
-                    <img src="/logo.png" alt="ISURI COMPUTERS" className="h-16 mx-auto mb-4 object-contain"/>
-                    <h1 className="text-3xl font-extrabold text-white mb-1">Create Account</h1>
-                    <p className="text-slate-400 text-sm">Join ISURI COMPUTERS today</p>
+                <div className="w-full">
+                    <label className="text-white/80 text-sm font-medium flex items-center gap-2 mb-1.5">
+                        <MdEmail /> Email
+                    </label>
+                    <input
+                        className="w-full h-[44px] rounded-lg px-3 bg-white/10 border border-white/25 text-white placeholder:text-white/40 focus:outline-none focus:border-sky-300 backdrop-blur-sm transition-colors"
+                        type="email"
+                        placeholder="kasun@gmail.com"
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                    />
                 </div>
 
-                <div className="card-glass p-8" style={{ border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 0 60px rgba(139,92,246,0.15)' }}>
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-slate-300 text-sm font-semibold mb-2 flex items-center gap-2">
-                                <MdEmail className="text-purple-400"/> Email
-                            </label>
-                            <input
-                                type="email"
-                                placeholder="you@example.com"
-                                className="w-full h-11 px-4 text-sm rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/10 transition-all outline-none"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-slate-300 text-sm font-semibold mb-2">First Name</label>
-                                <input
-                                    type="text"
-                                    placeholder="John"
-                                    className="w-full h-11 px-4 text-sm rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/10 transition-all outline-none"
-                                    value={firstName}
-                                    onChange={(e) => setFirstName(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-slate-300 text-sm font-semibold mb-2">Last Name</label>
-                                <input
-                                    type="text"
-                                    placeholder="Doe"
-                                    className="w-full h-11 px-4 text-sm rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/10 transition-all outline-none"
-                                    value={lastName}
-                                    onChange={(e) => setLastName(e.target.value)}
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-slate-300 text-sm font-semibold mb-2 flex items-center gap-2">
-                                <BiKey className="text-purple-400"/> Password
-                            </label>
-                            <input
-                                type="password"
-                                placeholder="••••••••••"
-                                className="w-full h-11 px-4 text-sm rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/10 transition-all outline-none"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-slate-300 text-sm font-semibold mb-2 flex items-center gap-2">
-                                <BiKey className="text-purple-400"/> Confirm Password
-                            </label>
-                            <input
-                                type="password"
-                                placeholder="••••••••••"
-                                className="w-full h-11 px-4 text-sm rounded-xl border border-white/10 bg-white/5 text-white placeholder-slate-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/10 transition-all outline-none"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                            />
-                        </div>
+                <div className="w-full mt-4 flex flex-row gap-3">
+                    <div className="w-1/2">
+                        <label className="text-white/80 text-sm font-medium mb-1.5 block">First Name</label>
+                        <input
+                            className="w-full h-[44px] rounded-lg px-3 bg-white/10 border border-white/25 text-white placeholder:text-white/40 focus:outline-none focus:border-sky-300 backdrop-blur-sm transition-colors"
+                            type="text"
+                            placeholder="Kasun"
+                            onChange={(e) => setFirstName(e.target.value)}
+                            value={firstName}
+                        />
                     </div>
-
-                    <button
-                        disabled={loading}
-                        onClick={handleRegister}
-                        className="btn-primary w-full h-12 flex items-center justify-center text-sm mt-7"
-                    >
-                        {loading ? "Creating Account..." : "Create Account"}
-                    </button>
-
-                    <div className="my-5 flex items-center gap-4">
-                        <div className="flex-1 h-px bg-white/10"></div>
-                        <span className="text-slate-500 text-xs font-bold uppercase tracking-widest">OR</span>
-                        <div className="flex-1 h-px bg-white/10"></div>
+                    <div className="w-1/2">
+                        <label className="text-white/80 text-sm font-medium mb-1.5 block">Last Name</label>
+                        <input
+                            className="w-full h-[44px] rounded-lg px-3 bg-white/10 border border-white/25 text-white placeholder:text-white/40 focus:outline-none focus:border-sky-300 backdrop-blur-sm transition-colors"
+                            type="text"
+                            placeholder="Perera"
+                            onChange={(e) => setLastName(e.target.value)}
+                            value={lastName}
+                        />
                     </div>
-
-                    <button
-                        onClick={googleLogin}
-                        className="w-full h-12 rounded-xl border border-white/10 bg-white/5 text-white font-semibold text-sm flex items-center justify-center gap-3 hover:bg-white/10 hover:border-white/20 transition-all"
-                    >
-                        <BsGoogle size={16} className="text-red-400"/> Sign Up with Google
-                    </button>
                 </div>
 
-                <p className="text-center text-slate-500 text-sm mt-6">
-                    Already have an account?{" "}
-                    <Link to="/signin" className="font-bold text-purple-400 hover:text-purple-300 transition-colors">
-                        Sign in
-                    </Link>
+                <div className="w-full mt-4">
+                    <label className="text-white/80 text-sm font-medium flex items-center gap-2 mb-1.5">
+                        <BiKey /> Password
+                    </label>
+                    <input
+                        onChange={(e) => setPassword(e.target.value)}
+                        type="password"
+                        value={password}
+                        className="w-full h-[44px] rounded-lg px-3 bg-white/10 border border-white/25 text-white placeholder:text-white/40 focus:outline-none focus:border-sky-300 backdrop-blur-sm transition-colors"
+                        placeholder="••••••••••••"
+                    />
+                </div>
+
+                <div className="w-full mt-4">
+                    <label className="text-white/80 text-sm font-medium flex items-center gap-2 mb-1.5">
+                        <BiKey /> Confirm Password
+                    </label>
+                    <input
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        type="password"
+                        value={confirmPassword}
+                        className="w-full h-[44px] rounded-lg px-3 bg-white/10 border border-white/25 text-white placeholder:text-white/40 focus:outline-none focus:border-sky-300 backdrop-blur-sm transition-colors"
+                        placeholder="••••••••••••"
+                    />
+                </div>
+
+                <button
+                    disabled={loading}
+                    className="w-full h-[46px] bg-isuri-gradient mt-6 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-60 shadow-lg"
+                    onClick={handleRegister}
+                >
+                    {loading ? "Loading..." : "Sign Up"}
+                </button>
+
+                <p className="w-full text-center text-xs mt-4 text-white/70">
+                    Already have an account? <Link to="/signin" className="font-semibold text-sky-200 hover:underline">Sign in</Link>
                 </p>
+
+                <div className="flex items-center gap-3 my-5">
+                    <div className="h-px flex-1 bg-white/20" />
+                    <span className="text-[11px] text-white/60">OR</span>
+                    <div className="h-px flex-1 bg-white/20" />
+                </div>
+
+                <button
+                    onClick={googleLogin}
+                    className="w-full h-[46px] bg-white/90 text-slate-800 rounded-lg flex justify-center items-center gap-2 hover:bg-white transition-colors font-medium"
+                >
+                    <BsGoogle /> Sign In with Google
+                </button>
             </div>
         </div>
-    )
+    );
 }

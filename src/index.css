@@ -1,108 +1,27 @@
-@import "tailwindcss/preflight";
 @import "tailwindcss";
 
-/* =============================================
-   ISURI COMPUTERS — Clean Professional Theme
-   White + Blue — SimplyTek Style
-   ============================================= */
+/* Tailwind CSS v4 Theme Configuration */
+@theme {
+  --color-primary: #f8fafc;
+  --color-secondary: #ffffff;
+  --color-accent: #1d4ed8;
+  
+  --color-text-main: #111827;
+  --color-text-muted: #6b7280;
 
-:root {
-  --blue: #1d4ed8;
-  --blue-light: #eff6ff;
-  --blue-mid: #3b82f6;
-  --text-dark: #111827;
-  --text-mid: #4b5563;
-  --text-light: #9ca3af;
-  --border: #e5e7eb;
-  --bg: #f9fafb;
+  --background-image-isuri-gradient: linear-gradient(to right, #2563eb, #1e40af);
 }
 
-/* === BASE === */
+/* Base resets & custom helpers */
 body {
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  background: #ffffff;
-  color: var(--text-dark);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-primary);
+  color: var(--color-text-main);
   -webkit-font-smoothing: antialiased;
 }
 
-a { transition: color 0.2s, opacity 0.2s; }
-
-button:not(:disabled) { transition: all 0.2s; cursor: pointer; }
-button:not(:disabled):active { transform: scale(0.97); }
-button:disabled { opacity: 0.55; cursor: not-allowed; }
-
-input, textarea, select {
-  outline: none;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fff;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-input:focus, textarea:focus, select:focus {
-  border-color: var(--blue-mid);
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 99px; }
-
-/* === COMPONENT CLASSES === */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background: var(--blue);
-  color: #fff;
-  font-weight: 700;
-  padding: 10px 22px;
-  border-radius: 8px;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-}
-.btn-primary:hover {
-  background: #1e40af;
-  box-shadow: 0 4px 16px rgba(29,78,216,0.3);
-  transform: translateY(-1px);
-}
-.btn-primary:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background: #fff;
-  color: var(--text-dark);
-  font-weight: 600;
-  padding: 10px 22px;
-  border-radius: 8px;
-  font-size: 14px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.btn-secondary:hover {
-  border-color: #93c5fd;
-  color: var(--blue);
-  box-shadow: 0 2px 8px rgba(29,78,216,0.1);
-}
-
-.card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  transition: box-shadow 0.25s, transform 0.25s;
-}
-.card:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.09);
-  transform: translateY(-2px);
+/* Prevent images from shrinking and overlapping in flex lists */
+.no-shrink,
+div > img {
+  flex-shrink: 0;
 }

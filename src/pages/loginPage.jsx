@@ -35,24 +35,39 @@ export default function LoginPage() {
         },
     });
 
-    async function handleLogin() {
-        setLoading(true);
-        try {
-            const res = await api.post("/users/login", {
-                email: email,
-                password: password,
-            });
-            localStorage.setItem("token", res.data.token);
-            if (res.data.isAdmin) {
-                navigate("/admin");
-            } else {
-                navigate("/");
-            }
-        } catch (err) {
-            toast.error(err?.response?.data?.message || "Login failed");
+    // 'e' kiyana event parameter eka aniwaryen danna
+async function handleLogin(e) {
+    // 1. Page eka reload wena eka nawaththanna meka aniwaryai
+    if (e) e.preventDefault(); 
+    
+    setLoading(true);
+    try {
+        const res = await api.post("/auth/login", {
+            email: email,
+            password: password,
+        });
+
+        // Backend response eke data athule thiyena user saha token ganna
+        const token = res.data.data.token;
+        const user = res.data.data.user;
+
+        // 2. Token ekai user data ekai hariyatama save karanna
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        // 3. Admin da kiyala hariyatama check karanna (oyage db eke thiyena widiyata)
+        if (user.role === "admin" || user.isAdmin === "true" || user.isAdmin === true) {
+            navigate("/admin");
+        } else {
+            navigate("/");
         }
+
+    } catch (err) {
+        toast.error(err?.response?.data?.message || "Login failed");
+    } finally {
         setLoading(false);
     }
+  }
 
     return (
         <div className="w-full h-full min-h-screen relative flex justify-center items-center overflow-hidden bg-[url(https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)]">

@@ -63,10 +63,27 @@ export default function ReviewsPage() {
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
 
+  // 🟢 Fetch Products from Database
   useEffect(() => {
     api.get("/products")
-      .then(res => setProductsList(res.data || []))
-      .catch(err => console.log("Could not load products list for reviews", err));
+      .then(res => {
+        // Backend එකෙන් එන Data එක මොකක්ද කියලා Console එකේ බලමු
+        console.log("Products API Response:", res.data); 
+
+        let fetchedProducts = [];
+        
+        // Response එකේ Array එක තියෙන්නේ කොතනද කියලා හොයාගෙන සෙට් කිරීම
+        if (Array.isArray(res.data)) {
+            fetchedProducts = res.data;
+        } else if (Array.isArray(res.data?.data)) {
+            fetchedProducts = res.data.data;
+        } else if (Array.isArray(res.data?.products)) {
+            fetchedProducts = res.data.products;
+        }
+
+        setProductsList(fetchedProducts);
+      })
+      .catch(err => console.error("Could not load products list for reviews:", err));
   }, []);
 
   function handleAddReview(e) {
@@ -154,7 +171,7 @@ export default function ReviewsPage() {
 
         <button
           onClick={() => setShowModal(true)}
-          className="btn-primary px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
+          className="btn-primary px-6 py-3 bg-linear-to-r from-purple-600 to-blue-600 text-white font-bold rounded-xl flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
         >
           <FiPlusCircle size={18} /> Write a Review
         </button>
@@ -234,25 +251,21 @@ export default function ReviewsPage() {
 
               <div>
                 <label className="block text-slate-700 font-semibold text-sm mb-1">Select Product *</label>
+                
+                {/* 🟢 Database එකෙන් ආපු Products ටික විතරක් පෙන්වන Dropdown එක */}
                 <select
                   required
                   className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none bg-white"
                   value={selectedProduct}
                   onChange={(e) => setSelectedProduct(e.target.value)}
                 >
-                  <option value="">Choose a product...</option>
+                  <option value="" disabled>Choose a product...</option>
                   {productsList.length > 0 ? (
                     productsList.map(p => (
-                      <option key={p.productId} value={p.name}>{p.name}</option>
+                      <option key={p.productId || p._id} value={p.name}>{p.name}</option>
                     ))
                   ) : (
-                    <>
-                      <option value="Intel Core i7 12th Gen Processor">Intel Core i7 12th Gen Processor</option>
-                      <option value="NVIDIA GeForce RTX 4060 8GB">NVIDIA GeForce RTX 4060 8GB</option>
-                      <option value="Corsair Vengeance LPX 16GB DDR4 RAM">Corsair Vengeance LPX 16GB DDR4 RAM</option>
-                      <option value="Samsung 980 500GB NVMe SSD">Samsung 980 500GB NVMe SSD</option>
-                      <option value="ASUS TUF Gaming B650M-PLUS Motherboard">ASUS TUF Gaming B650M-PLUS Motherboard</option>
-                    </>
+                    <option value="" disabled>Loading products...</option>
                   )}
                 </select>
               </div>
