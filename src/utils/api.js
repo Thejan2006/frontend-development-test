@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3003/api', // (Oyage backend port eka 3003 nam mekaama thiyanna, nattam 5000 wage nam eka danna)
+    baseURL: 'https://backend-developmnet-test.onrender.com/api', // (Oyage backend port eka 3003 nam mekaama thiyanna, nattam 5000 wage nam eka danna)
     headers: {
         'Content-Type': 'application/json'
     },
