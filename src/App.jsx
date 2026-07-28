@@ -25,6 +25,7 @@ function App() {
             <Route path='/admin/*' element={<AdminPage/>}/>
             <Route path='/test' element={<TestPage/>}/>
             <Route path="/orders" element={<OrderSuccess />} />
+            <Route path="/my-orders" element={<MyOrders />} />
             
             <Route path='/*' element={<HomePage/>} />
           </Routes>
