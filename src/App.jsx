@@ -10,6 +10,7 @@ const ForgetPasswordPage = lazy(() => import('./pages/forgetPassword'))
 import { Toaster } from 'react-hot-toast'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import OrderSuccess from "./pages/OrderSuccess";
+import MyOrders from "./pages/myOrders";    
 
 function App() {
   return (
