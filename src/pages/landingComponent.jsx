@@ -59,7 +59,7 @@ export default function LandingPage() {
             <section
                 className="relative w-full overflow-hidden"
                 style={{
-                    backgroundImage: `url('https://images.unsplash.com/photo-1547394765-185e1e68f34e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
+                    backgroundImage: `url('https://images.unsplash.com/photo-1672211775632-bcb4b68eb2bd?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
                     backgroundSize: "cover",
                     backgroundPosition: "center 30%",
                 }}
@@ -141,9 +141,16 @@ export default function LandingPage() {
                         {/* Right decorative */}
                         <div className="lg:col-span-5 hidden lg:flex justify-center items-center">
                             <div className="relative w-full max-w-sm">
-                                <div className="aspect-square rounded-3xl bg-white/5 backdrop-blur-md border border-white/20 flex items-center justify-center p-8 shadow-2xl">
-                                    <div className="text-center">
-                                        <div className="text-6xl mb-4 filter drop-shadow-lg">🖥️</div>
+                                <div
+                                    className="aspect-square rounded-3xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/20 shadow-2xl relative"
+                                    style={{
+                                        backgroundImage: `url('https://images.unsplash.com/photo-1756576630180-653cbd594433?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "center",
+                                    }}
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/90 via-[#0a1628]/10 to-transparent" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-8 text-center">
                                         <div className="text-white/80 text-sm font-medium">Genuine · Warranty · Fast</div>
                                         <div className="flex items-center justify-center gap-1 mt-3 text-yellow-400 text-sm">
                                             <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
