@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
 export default function OrderSuccess() {
   // අදින් දවස් 3කට පසු දිනය සාදා ගැනීම
   const deliveryDate = new Date();
@@ -51,7 +52,7 @@ export default function OrderSuccess() {
             Continue Shopping
           </Link>
           <Link 
-            to="/orders" 
+            to="/my-orders" 
             className="w-full flex justify-center py-3 px-4 border border-blue-600 rounded-lg shadow-sm text-sm font-medium text-blue-600 bg-white hover:bg-blue-50 transition duration-300"
           >
             View My Orders
