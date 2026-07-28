@@ -23,8 +23,8 @@ function App() {
             <Route path='/forget-password' element={<ForgetPasswordPage/>}/>
             <Route path='/admin/*' element={<AdminPage/>}/>
             <Route path='/test' element={<TestPage/>}/>
-
-            {/* HomePage එක (/*) හැමවිටම අන්තිමටම දාන්න */}
+             <Route path="/orders" element={<MyOrdersPage />} />
+            
             <Route path='/*' element={<HomePage/>} />
           </Routes>
         </Suspense>
