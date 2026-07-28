@@ -9,6 +9,7 @@ const TestPage = lazy(() => import('./pages/test'))
 const ForgetPasswordPage = lazy(() => import('./pages/forgetPassword'))
 import { Toaster } from 'react-hot-toast'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import OrderSuccess from "./pages/OrderSuccess";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
             <Route path='/forget-password' element={<ForgetPasswordPage/>}/>
             <Route path='/admin/*' element={<AdminPage/>}/>
             <Route path='/test' element={<TestPage/>}/>
-             <Route path="/orders" element={<MyOrdersPage />} />
+            <Route path="/orders" element={<OrderSuccess />} />
             
             <Route path='/*' element={<HomePage/>} />
           </Routes>
