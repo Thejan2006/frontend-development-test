@@ -3,6 +3,7 @@ import { FaStar, FaRegStar, FaCheckCircle, FaUserCircle } from "react-icons/fa";
 import { FiPlusCircle, FiThumbsUp } from "react-icons/fi";
 import toast from "react-hot-toast";
 import api from "../utils/api";
+import { extractProductList, getApiErrorMessage } from "../utils/api-response";
 
 const INITIAL_REVIEWS = [
   {
@@ -54,6 +55,8 @@ export default function ReviewsPage() {
   });
 
   const [productsList, setProductsList] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   // Form State
@@ -65,25 +68,35 @@ export default function ReviewsPage() {
 
   // 🟢 Fetch Products from Database
   useEffect(() => {
-    api.get("/products")
-      .then(res => {
-        // Backend එකෙන් එන Data එක මොකක්ද කියලා Console එකේ බලමු
-        console.log("Products API Response:", res.data); 
+    let cancelled = false;
 
-        let fetchedProducts = [];
-        
-        // Response එකේ Array එක තියෙන්නේ කොතනද කියලා හොයාගෙන සෙට් කිරීම
-        if (Array.isArray(res.data)) {
-            fetchedProducts = res.data;
-        } else if (Array.isArray(res.data?.data)) {
-            fetchedProducts = res.data.data;
-        } else if (Array.isArray(res.data?.products)) {
-            fetchedProducts = res.data.products;
+    async function fetchProducts() {
+      setProductsLoading(true);
+      setProductsError("");
+
+      try {
+        const res = await api.get("/products");
+        if (!cancelled) {
+          setProductsList(extractProductList(res.data));
         }
+      } catch (err) {
+        console.error("Could not load products list for reviews:", err);
+        if (!cancelled) {
+          setProductsList([]);
+          setProductsError(getApiErrorMessage(err, "Unable to load the product list."));
+        }
+      } finally {
+        if (!cancelled) {
+          setProductsLoading(false);
+        }
+      }
+    }
 
-        setProductsList(fetchedProducts);
-      })
-      .catch(err => console.error("Could not load products list for reviews:", err));
+    fetchProducts();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   function handleAddReview(e) {
@@ -254,19 +267,27 @@ export default function ReviewsPage() {
                 {/* 🟢 Database එකෙන් ආපු Products ටික විතරක් පෙන්වන Dropdown එක */}
                 <select
                   required
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none bg-white"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-600 focus:outline-none bg-white disabled:bg-slate-50 disabled:text-slate-400"
                   value={selectedProduct}
                   onChange={(e) => setSelectedProduct(e.target.value)}
+                  disabled={productsLoading || !!productsError}
                 >
-                  <option value="" disabled>Choose a product...</option>
-                  {productsList.length > 0 ? (
+                  <option value="" disabled>
+                    {productsLoading ? "Loading products..." : "Choose a product..."}
+                  </option>
+                  {productsError ? (
+                    <option value="" disabled>{productsError}</option>
+                  ) : productsList.length > 0 ? (
                     productsList.map(p => (
                       <option key={p.productId || p._id} value={p.name}>{p.name}</option>
                     ))
-                  ) : (
-                    <option value="" disabled>Loading products...</option>
-                  )}
+                  ) : !productsLoading ? (
+                    <option value="" disabled>No products available</option>
+                  ) : null}
                 </select>
+                {productsError && (
+                  <p className="mt-2 text-sm text-red-600">{productsError}</p>
+                )}
               </div>
 
               <div>
