@@ -67,7 +67,7 @@ export default function CheckoutPage() {
         };
 
         try {
-            const response = await api.post("/orders", orderPayload, {
+            await api.post("/orders", orderPayload, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -75,7 +75,7 @@ export default function CheckoutPage() {
 
             toast.success("Order එක සාර්ථකව යැවුණා!");
             localStorage.setItem("cart", "[]"); // Clear cart
-            navigate("/orders"); // Profile orders page එකට යැවීම
+            navigate("/order-success");
         } catch (error) {
             console.error("Order placing error:", error);
             const errorMsg = error?.response?.data?.message || "Order එක දාන්න බැරි වුණා. කරුණාකර නැවත උත්සාහ කරන්න.";
