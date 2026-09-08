@@ -11,25 +11,26 @@ export default function ProductImageSlideShow(props){
       : getProductFallbackImage(product);
 
     return(
-        <div className="w-full max-w-[450px] flex flex-col items-center">
-            <div className="w-full h-[400px] bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-center justify-center">
+        <div className="w-full max-w-[520px] animate-[fade-in-up_600ms_ease_both]">
+            <div className="group relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-blue-50 p-8 shadow-xl shadow-slate-900/5 sm:p-12">
+                <div className="absolute -left-12 -top-12 h-40 w-40 rounded-full bg-blue-500/10 blur-3xl transition duration-700 group-hover:scale-150" />
                 <img 
                     src={initialImgSrc} 
                     onError={(e) => handleImageError(e, product)}
-                    className="w-full h-full object-contain transition-all duration-300"
+                    className="relative h-full w-full object-contain transition duration-500 ease-out group-hover:scale-105"
                     alt="Product Detail"
                 />
             </div>
             
             {images.length > 1 && (
-                <div className="w-full flex justify-center items-center gap-3 mt-4 overflow-x-auto py-2">
+                <div className="flex w-full items-center justify-center gap-3 overflow-x-auto py-4">
                     {images.map((image , index)=>{
                         return (
                             <img 
                                 key={index} 
                                 src={image} 
                                 onError={(e) => handleImageError(e, product)}
-                                className={"w-16 h-16 object-contain rounded-xl bg-white p-2 border-2 cursor-pointer transition-all "+(activeImageIndex===index ? "border-purple-600 shadow-md scale-105" : "border-slate-200 hover:border-purple-300")} 
+                                className={"h-16 w-16 cursor-pointer rounded-xl border-2 bg-white p-2 object-contain transition-all "+(activeImageIndex===index ? "scale-105 border-blue-600 shadow-md shadow-blue-600/20" : "border-slate-200 hover:border-blue-300")}
                                 onClick={()=>setActiveImageIndex(index)}
                             />
                         )

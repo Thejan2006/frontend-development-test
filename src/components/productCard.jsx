@@ -1,72 +1,31 @@
 import { Link } from "react-router-dom";
+import { ArrowUpRight, ShoppingCart, Star } from "lucide-react";
 import getFormattedPrice from "../utils/price-formatter";
 import { getProductFallbackImage, handleImageError } from "../utils/product-image-fallback";
-import { FaStar } from "react-icons/fa";
 
-export default function ProductCard(props){
-    const product = props.product;
-
-    const initialImgSrc = (product.images && product.images.length > 0 && product.images[0])
-        ? product.images[0]
-        : getProductFallbackImage(product);
-
+export default function ProductCard({ product }) {
+    const initialImgSrc = product.images?.[0] || product.image || getProductFallbackImage(product);
     const discount = product.price < product.labelledPrice
         ? Math.round(((product.labelledPrice - product.price) / product.labelledPrice) * 100)
         : 0;
+    const stock = Number(product.stock ?? 0);
+    const hasStock = product.isAvailable !== false && (product.stock == null || stock > 0);
 
     return (
-        <Link to={"/overview/" + product.productId}
-            className="card flex flex-col overflow-hidden group h-full relative">
-
-            {/* Discount Badge */}
-            {discount > 0 && (
-                <div className="absolute top-2 left-2 z-10 bg-red-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded">
-                    -{discount}%
-                </div>
-            )}
-
-            {/* Image */}
-            <div className="w-full aspect-square bg-gray-50 flex items-center justify-center p-4 overflow-hidden border-b border-gray-100">
-                <img
-                    src={initialImgSrc}
-                    onError={(e) => handleImageError(e, product)}
-                    alt={product.name}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                />
+        <Link to={`/overview/${product.productId || product._id}`} className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1.5 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-900/10">
+            <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between p-3">
+                {discount > 0 ? <span className="rounded-full bg-blue-600 px-2.5 py-1 text-[10px] font-black tracking-wide text-white shadow-sm">SAVE {discount}%</span> : <span />}
+                <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${hasStock ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>{hasStock ? "In stock" : "Out of stock"}</span>
             </div>
-
-            {/* Content */}
-            <div className="flex flex-col flex-grow p-4 bg-white">
-                {/* Stars */}
-                <div className="flex text-amber-400 text-xs gap-0.5 mb-2">
-                    {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className={i < 4 ? "text-amber-400" : "text-gray-200"}/>
-                    ))}
-                    <span className="text-gray-400 text-[11px] ml-1 font-medium">(4.8)</span>
-                </div>
-
-                {/* Name */}
-                <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 leading-snug mb-3 group-hover:text-blue-700 transition-colors flex-grow">
-                    {product.name}
-                </h3>
-
-                {/* Price */}
-                <div className="pt-3 border-t border-gray-50 mt-auto">
-                    {product.price < product.labelledPrice ? (
-                        <div>
-                            <span className="text-red-500 text-base font-extrabold">
-                                {getFormattedPrice(product.price)}
-                            </span>
-                            <span className="text-gray-400 line-through text-xs ml-2">
-                                {getFormattedPrice(product.labelledPrice)}
-                            </span>
-                        </div>
-                    ) : (
-                        <span className="text-gray-900 text-base font-extrabold">
-                            {getFormattedPrice(product.price)}
-                        </span>
-                    )}
-                </div>
+            <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/60 p-6 sm:p-8">
+                <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-blue-500/10 blur-2xl transition duration-500 group-hover:scale-150" />
+                <img src={initialImgSrc} onError={(e) => handleImageError(e, product)} alt={product.name} className="relative h-full w-full object-contain transition duration-500 ease-out group-hover:scale-110 group-hover:-rotate-2" />
+                <span className="absolute bottom-3 right-3 flex h-9 w-9 translate-y-2 items-center justify-center rounded-xl bg-white text-blue-600 opacity-0 shadow-md transition duration-300 group-hover:translate-y-0 group-hover:opacity-100"><ArrowUpRight size={18} /></span>
+            </div>
+            <div className="flex flex-1 flex-col p-4 sm:p-5">
+                <div className="mb-2 flex items-center gap-1.5"><div className="flex text-amber-400"><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} className="text-slate-200" fill="currentColor" /></div><span className="text-[11px] font-semibold text-slate-400">4.8 · Reviews</span></div>
+                <h3 className="line-clamp-2 min-h-[2.75rem] text-sm font-bold leading-snug text-slate-800 transition-colors group-hover:text-blue-700">{product.name}</h3>
+                <div className="mt-auto flex items-end justify-between gap-2 border-t border-slate-100 pt-4"><div>{discount > 0 && <p className="text-xs text-slate-400 line-through">{getFormattedPrice(product.labelledPrice)}</p>}<p className="text-base font-black text-blue-700">{getFormattedPrice(product.price)}</p></div><span className="flex items-center gap-1 rounded-lg bg-blue-50 px-2 py-1.5 text-[11px] font-bold text-blue-700"><ShoppingCart size={13} /> View</span></div>
             </div>
         </Link>
     );
