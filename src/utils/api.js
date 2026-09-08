@@ -1,7 +1,40 @@
 import axios from 'axios';
 
+const DEFAULT_API_BASE_URL = "https://backend-developmnet-test.onrender.com";
+
+function normalizeApiBaseUrl(baseUrl) {
+    if (!baseUrl) {
+        return `${DEFAULT_API_BASE_URL}/api`;
+    }
+
+    const trimmedBaseUrl = baseUrl.trim().replace(/\/+$/, "");
+    return trimmedBaseUrl.endsWith("/api") ? trimmedBaseUrl : `${trimmedBaseUrl}/api`;
+}
+
+function resolveApiBaseUrl() {
+    if (typeof import.meta !== "undefined" && import.meta.env) {
+        const viteBaseUrl =
+            import.meta.env.VITE_API_BASE_URL ||
+            import.meta.env.VITE_API_URL;
+
+        if (viteBaseUrl) {
+            return normalizeApiBaseUrl(viteBaseUrl);
+        }
+    }
+
+    if (typeof process !== "undefined" && process.env) {
+        const reactBaseUrl = process.env.REACT_APP_API_URL;
+
+        if (reactBaseUrl) {
+            return normalizeApiBaseUrl(reactBaseUrl);
+        }
+    }
+
+    return normalizeApiBaseUrl(DEFAULT_API_BASE_URL);
+}
+
 const api = axios.create({
-    baseURL: 'https://backend-developmnet-test.onrender.com/api', // (Oyage backend port eka 3003 nam mekaama thiyanna, nattam 5000 wage nam eka danna)
+    baseURL: resolveApiBaseUrl(),
     headers: {
         'Content-Type': 'application/json'
     },
