@@ -3,21 +3,32 @@ import { Link } from "react-router-dom";
 import { FiArrowRight, FiShield, FiTruck, FiPhone, FiCpu, FiMonitor, FiHardDrive } from "react-icons/fi";
 import api from "../utils/api";
 import ProductCard from "../components/productCard";
+import { extractProductList, getApiErrorMessage } from "../utils/api-response";
 
 export default function LandingPage() {
     const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [loadingProducts, setLoadingProducts] = useState(true);
+    const [productsError, setProductsError] = useState("");
+
+    async function fetchFeaturedProducts() {
+        setLoadingProducts(true);
+        setProductsError("");
+
+        try {
+            const res = await api.get("/products");
+            const productsData = extractProductList(res.data);
+            setFeaturedProducts(productsData.slice(0, 4));
+        } catch (err) {
+            console.error("Error fetching products:", err);
+            setFeaturedProducts([]);
+            setProductsError(getApiErrorMessage(err, "Unable to load featured products right now."));
+        } finally {
+            setLoadingProducts(false);
+        }
+    }
 
     useEffect(() => {
-        api.get("/products")
-            .then(res => {
-                console.log("API Response:", res.data);
-                const productsData = Array.isArray(res.data) ? res.data : (res.data.products || res.data.data || []);
-                setFeaturedProducts(productsData.slice(0, 4));
-            })
-            .catch((err) => {
-                console.error("Error fetching products:", err);
-                setFeaturedProducts([]);
-            });
+        fetchFeaturedProducts();
     }, []);
 
     // Category cards – uses more relevant icons and follows brief's categories
@@ -316,7 +327,27 @@ export default function LandingPage() {
                     </Link>
                 </div>
 
-                {featuredProducts.length > 0 ? (
+                {loadingProducts ? (
+                    <div className="text-center py-16 text-slate-400 flex flex-col items-center justify-center gap-3">
+                        <svg className="animate-spin h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <p className="text-sm font-medium">Loading featured products...</p>
+                    </div>
+                ) : productsError ? (
+                    <div className="max-w-2xl mx-auto text-center py-16 px-6 rounded-2xl border border-red-200 bg-red-50">
+                        <p className="text-red-700 font-semibold">Featured products are unavailable right now.</p>
+                        <p className="text-red-600 text-sm mt-2">{productsError}</p>
+                        <button
+                            type="button"
+                            onClick={fetchFeaturedProducts}
+                            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white hover:bg-red-500 transition-colors"
+                        >
+                            Try Again
+                        </button>
+                    </div>
+                ) : featuredProducts.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         {featuredProducts.map((product) => (
                             <ProductCard key={product.productId || product._id} product={product} />
@@ -324,11 +355,7 @@ export default function LandingPage() {
                     </div>
                 ) : (
                     <div className="text-center py-16 text-slate-400 flex flex-col items-center justify-center gap-3">
-                        <svg className="animate-spin h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <p className="text-sm font-medium">Loading products or no products found...</p>
+                        <p className="text-sm font-medium">No featured products found.</p>
                     </div>
                 )}
                 <div className="text-center mt-12">
