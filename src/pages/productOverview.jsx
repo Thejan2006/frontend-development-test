@@ -7,36 +7,90 @@ import getFormattedPrice from "../utils/price-formatter"
 import { addToCart } from "../utils/cart"
 import toast from "react-hot-toast"
 import ReviewsPanel from "../components/ReviewsPanel" 
+import { extractProduct, getApiErrorMessage } from "../utils/api-response"
 
 export default function ProductOverview(){
     const parameters = useParams()
     const navigate = useNavigate()
     const [product , setProduct] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState("")
+    const [reloadKey, setReloadKey] = useState(0)
 
     useEffect(()=>{
         if(parameters.productId==null){
             navigate("/products")
+            return
         }
-        
-        api.get("/products/"+parameters.productId).then((response)=>{
-            // 🛠️ FIX 1: Backend එකෙන් එන { success: true, data: {...} } එක හරියටම ගන්නවා
-            const fetchedProduct = response.data.data ? response.data.data : response.data;
-            setProduct(fetchedProduct);
-        }).catch((error)=>{
-            console.error("Error fetching product details:", error)
-            navigate("/products")
-        })
 
-    }, [parameters.productId, navigate])
+        let cancelled = false
+
+        async function fetchProduct(){
+            setLoading(true)
+            setError("")
+
+            try{
+                const response = await api.get("/products/"+parameters.productId)
+                const fetchedProduct = extractProduct(response.data)
+                if (!fetchedProduct) {
+                    throw new Error("Product data was not returned by the API.")
+                }
+                if(!cancelled){
+                    setProduct(fetchedProduct)
+                }
+            }catch(error){
+                console.error("Error fetching product details:", error)
+                if(!cancelled){
+                    setProduct(null)
+                    setError(getApiErrorMessage(error, "Unable to load this product right now."))
+                }
+            }finally{
+                if(!cancelled){
+                    setLoading(false)
+                }
+            }
+        }
+
+        fetchProduct()
+
+        return () => {
+            cancelled = true
+        }
+
+    }, [parameters.productId, navigate, reloadKey])
 
 
     return (
         <div className="w-full h-auto lg:h-full pt-10 lg:pt-0 bg-primary flex flex-col items-center overflow-y-scroll pb-10">
             {
-                product == null && <LoadingScreen/>
+                loading && <LoadingScreen/>
             }
             {
-                product != null && (
+                !loading && error && (
+                    <div className="w-full max-w-2xl mx-auto mt-20 rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-center text-white">
+                        <h1 className="text-2xl font-semibold">Product unavailable</h1>
+                        <p className="mt-3 text-sm text-white/80">{error}</p>
+                        <div className="mt-6 flex flex-wrap justify-center gap-3">
+                            <button
+                                type="button"
+                                onClick={() => navigate("/products")}
+                                className="rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
+                            >
+                                Back to Products
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setReloadKey((value) => value + 1)}
+                                className="rounded-lg border border-white/20 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
+                            >
+                                Try Again
+                            </button>
+                        </div>
+                    </div>
+                )
+            }
+            {
+                !loading && !error && product != null && (
                 <div className="w-full max-w-7xl mx-auto flex flex-col">
                     <div className="w-full flex flex-col lg:flex-row justify-center">
                         <div className="w-full lg:w-1/2 h-full flex justify-center items-center p-6">
